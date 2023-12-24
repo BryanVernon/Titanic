@@ -33,13 +33,22 @@ df2 = pd.read_csv("test.csv")
 # Data Wrangling
 
 df = df.drop('Cabin', axis=1)
+print(df[df['Embarked'].isnull()])
+print(df.head())
+# Convert 'Sex' column to numeric values
+le_sex = LabelEncoder()
+df['Sex'] = le_sex.fit_transform(df['Sex'])
+
+# Convert 'Embarked' column to numeric values
+le_embarked = LabelEncoder()
+df['Embarked'] = le_embarked.fit_transform(df['Embarked'])
 
 # Separate dataset into two parts: one with missing ages and one without
 df_missing_age = df[df['Age'].isnull()]
 df_no_missing_age = df[df['Age'].notnull()]
 
 # Features and target variable
-features = ['Pclass', 'SibSp', 'Parch', 'Fare']
+features = ['Pclass', 'SibSp', 'Parch', 'Fare','Embarked','Sex']
 target = 'Age'
 
 # Train a model to predict missing ages
@@ -58,14 +67,6 @@ df['Title'] = df['Name'].str.extract(r',\s(.*?)\.')
 # Drop unnecessary columns
 df = df.drop(columns= ['Name', 'Ticket'])
 
-# Convert 'Sex' column to numeric values
-le_sex = LabelEncoder()
-df['Sex'] = le_sex.fit_transform(df['Sex'])
-
-# Convert 'Embarked' column to numeric values
-le_embarked = LabelEncoder()
-df['Embarked'] = le_embarked.fit_transform(df['Embarked'])
-
 # print(df['Title'].unique())
 
 df['Title'] = df['Title'].replace('Mlle', 'Miss')
@@ -80,13 +81,22 @@ df['Title'] = df['Title'].map(title_mapping)
 
 df2 = df2.drop('Cabin', axis=1)
 df2['Fare'].fillna(df2['Fare'].median(), inplace=True)
+# Convert 'Sex' column to numeric values
+le_sex = LabelEncoder()
+df2['Sex'] = le_sex.fit_transform(df2['Sex'])
+
+# Convert 'Embarked' column to numeric values
+le_embarked = LabelEncoder()
+df2['Embarked'] = le_embarked.fit_transform(df2['Embarked'])
 
 # Separate dataset into two parts: one with missing ages and one without
 df_missing_age = df2[df2['Age'].isnull()]
 df_no_missing_age = df2[df2['Age'].notnull()]
 
+
+
 # Features and target variable
-features = ['Pclass', 'SibSp', 'Parch', 'Fare']
+features = ['Pclass', 'SibSp', 'Parch', 'Fare','Embarked','Sex']
 target = 'Age'
 
 # Train a model to predict missing ages
@@ -150,6 +160,6 @@ y_pred = clf.predict(df2)
 output_df = pd.DataFrame({'PassengerId': df2['PassengerId'], 'Survived': y_pred})
 
 # Save the DataFrame to a CSV file
-output_df.to_csv('prediction.csv', index=False)
+output_df.to_csv('prediction_two.csv', index=False)
 
 
