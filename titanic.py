@@ -129,11 +129,13 @@ df2['Title'] = df2['Title'].map(title_mapping)
 
 # print(df2.isna().sum())
 
-X_train = df.drop("Survived", axis=1)
-y_train = df["Survived"]
+# Keep only the specified features
+selected_features = ['Title', 'Pclass', 'Sex', 'Fare', 'SibSp', 'Age', 'Parch', 'Embarked', 'PassengerId']
+df = df[selected_features + ['Survived']]
+df2 = df2[selected_features]
 
-# Ensure that the columns in the test dataset match the columns used for training
-X_test = df2[X_train.columns]
+# Train-test split
+X_train, X_valid, y_train, y_valid = train_test_split(df.drop('Survived', axis=1), df['Survived'], test_size=0.2, random_state=42)
 
 # Initialize the RandomForestClassifier
 clf = RandomForestClassifier(random_state=42)
@@ -142,12 +144,12 @@ clf = RandomForestClassifier(random_state=42)
 clf.fit(X_train, y_train)
 
 # Make predictions on the test set
-y_pred = clf.predict(X_test)
+y_pred = clf.predict(df2)
 
 # Assuming 'y_pred' contains your predictions and 'PassengerId' is a column in df2
 output_df = pd.DataFrame({'PassengerId': df2['PassengerId'], 'Survived': y_pred})
 
 # Save the DataFrame to a CSV file
-output_df.to_csv('predictions.csv', index=False)
+output_df.to_csv('prediction.csv', index=False)
 
 
