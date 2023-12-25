@@ -33,8 +33,6 @@ df2 = pd.read_csv("test.csv")
 # Data Wrangling
 
 df = df.drop('Cabin', axis=1)
-print(df[df['Embarked'].isnull()])
-print(df.head())
 # Convert 'Sex' column to numeric values
 le_sex = LabelEncoder()
 df['Sex'] = le_sex.fit_transform(df['Sex'])
@@ -75,6 +73,7 @@ df['Title'] = df['Title'].replace('Mme', 'Mrs')
 df['Title'] = df['Title'].replace(['Lady', 'Countess','Capt', 'Col','Don', 'Dr', 'Major', 'Rev', 'Sir', 'Jonkheer', 'Dona', 'the Countess'], 'Rare')
 title_mapping = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
 df['Title'] = df['Title'].map(title_mapping)
+
 # print(df.isna().sum())
 
 # Data Wrangling for test dataset
@@ -115,14 +114,6 @@ df2['Title'] = df2['Name'].str.extract(r',\s(.*?)\.')
 # Drop unnecessary columns
 df2 = df2.drop(columns= ['Name', 'Ticket'])
 
-# Convert 'Sex' column to numeric values
-le_sex = LabelEncoder()
-df2['Sex'] = le_sex.fit_transform(df2['Sex'])
-
-# Convert 'Embarked' column to numeric values
-le_embarked = LabelEncoder()
-df2['Embarked'] = le_embarked.fit_transform(df2['Embarked'])
-
 # print(df2['Title'].unique())
 
 df2['Title'] = df2['Title'].replace('Mlle', 'Miss')
@@ -160,6 +151,6 @@ y_pred = clf.predict(df2)
 output_df = pd.DataFrame({'PassengerId': df2['PassengerId'], 'Survived': y_pred})
 
 # Save the DataFrame to a CSV file
-output_df.to_csv('prediction_two.csv', index=False)
+output_df.to_csv('pred.csv', index=False)
 
 
